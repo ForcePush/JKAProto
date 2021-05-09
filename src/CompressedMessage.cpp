@@ -1,4 +1,4 @@
-#include "CompressedMessage.h"
+#include "../include/CompressedMessage.h"
 
 #include <cassert>
 #include <iostream>

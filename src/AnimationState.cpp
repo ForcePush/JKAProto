@@ -1,4 +1,4 @@
-#include "AnimationState.h"
+#include "../include/AnimationState.h"
 
 #include <cassert>
 #include <cmath>

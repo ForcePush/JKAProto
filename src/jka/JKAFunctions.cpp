@@ -2,10 +2,10 @@
 #include <cstdio>
 #include <cstdarg>
 
-#include "JKAFunctions.h"
-#include "JKAConstants.h"
-#include "JKAStructs.h"
-#include "JKAEnums.h"
+#include "../../include/jka/JKAFunctions.h"
+#include "../../include/jka/JKAConstants.h"
+#include "../../include/jka/JKAStructs.h"
+#include "../../include/jka/JKAEnums.h"
 
 namespace JKA
 {

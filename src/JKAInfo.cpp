@@ -1,4 +1,4 @@
-#include "JKAInfo.h"
+#include "../include/JKAInfo.h"
 
 #include <charconv>
 #include <string>

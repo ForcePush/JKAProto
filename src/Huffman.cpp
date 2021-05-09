@@ -1,14 +1,14 @@
-#include "Huffman.h"
+#include "../include/Huffman.h"
 
 #include <climits>  // CHAR_BIT
 #include <memory>
 
-#include "jka/JKADefs.h"
+#include "../include/jka/JKADefs.h"
 
 using namespace JKA;
 
 // Q3 TA freq. table.
-#include "_HuffmanTable.h"
+#include "../include/_HuffmanTable.h"
 
 /* Get a symbol */
 int32_t Huffman::Huff_Receive(node_t *node, int32_t *ch, ByteBitStream & fin) {

@@ -1,4 +1,4 @@
-#include "CommandExecutor.h"
+#include "../include/CommandExecutor.h"
 
 CommandExecutor::Command CommandExecutor::parseCommandString(std::string_view commandString)
 {

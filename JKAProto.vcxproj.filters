@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\packets">
+      <UniqueIdentifier>{6c9fe56a-5f81-4232-8b0e-a4546fb231d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\jka">
+      <UniqueIdentifier>{eb8240da-4cc8-4e5f-a598-75c6adcd8921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\packets">
+      <UniqueIdentifier>{03d9ca06-1d88-4a39-b273-d1278b60e677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\jka">
+      <UniqueIdentifier>{3eecff07-e50e-4626-8b84-2ff850426c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{862b0263-1307-4de6-93c0-dc15488f2b80}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AnimationState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CommandExecutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CommandParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CompressedMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Huffman.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JKAInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\packets\ConnlessPacketFactory.cpp">
+      <Filter>Source Files\packets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jka\JKAAnims.cpp">
+      <Filter>Source Files\jka</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jka\JKAEvents.cpp">
+      <Filter>Source Files\jka</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jka\JKAFunctions.cpp">
+      <Filter>Source Files\jka</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\_HuffmanTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AnimationState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CommandExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CommandParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CompressedMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CTHash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Geometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Huffman.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\ConnlessPacketFactory.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\Disconnect.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\Getchallenge.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\Getinfo.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\Getservers.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\Getstatus.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\Print.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\Rcon.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\AllConnlessPackets.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\Connect.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\packets\ConnlessPacket.h">
+      <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\Gencmds.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\JKAAnims.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\JKAConstants.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\JKADefs.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\JKADefsNet.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\JKAEnums.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\JKAEvents.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\JKAFunctions.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\JKAStructs.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\Usercmd.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+    <ClInclude Include="include\jka\Buttons.h">
+      <Filter>Header Files\jka</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\data\ConnlessPacketsList.inc">
+      <Filter>data</Filter>
+    </None>
+    <None Include="include\data\JKAEvents.inc">
+      <Filter>data</Filter>
+    </None>
+  </ItemGroup>
+</Project>
