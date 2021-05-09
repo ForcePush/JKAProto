@@ -1,0 +1,1 @@
+`Huffman.cpp`, `_HuffmanTable.h`, `CompressedMessage.cpp` and all files in the `jka` directory contains modified JKA source which was released under GPLv2, see `LICENSE.md`.
