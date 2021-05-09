@@ -1,4 +1,4 @@
-#include "../include/AnimationState.h"
+#include <JKAProto/AnimationState.h>
 
 #include <cassert>
 #include <cmath>

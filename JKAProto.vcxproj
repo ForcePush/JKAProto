@@ -31,25 +31,37 @@
     <ClCompile Include="src\packets\ConnlessPacketFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\AnimationState.h" />
-    <ClInclude Include="include\CommandExecutor.h" />
-    <ClInclude Include="include\CommandParser.h" />
-    <ClInclude Include="include\CompressedMessage.h" />
-    <ClInclude Include="include\CTHash.h" />
-    <ClInclude Include="include\Geometry.h" />
-    <ClInclude Include="include\Huffman.h" />
-    <ClInclude Include="include\JKAInfo.h" />
-    <ClInclude Include="include\jka\Buttons.h" />
-    <ClInclude Include="include\jka\Gencmds.h" />
-    <ClInclude Include="include\jka\JKAAnims.h" />
-    <ClInclude Include="include\jka\JKAConstants.h" />
-    <ClInclude Include="include\jka\JKADefs.h" />
-    <ClInclude Include="include\jka\JKADefsNet.h" />
-    <ClInclude Include="include\jka\JKAEnums.h" />
-    <ClInclude Include="include\jka\JKAEvents.h" />
-    <ClInclude Include="include\jka\JKAFunctions.h" />
-    <ClInclude Include="include\jka\JKAStructs.h" />
-    <ClInclude Include="include\jka\Usercmd.h" />
+    <ClInclude Include="include\JKAProto\AnimationState.h" />
+    <ClInclude Include="include\JKAProto\CommandExecutor.h" />
+    <ClInclude Include="include\JKAProto\CommandParser.h" />
+    <ClInclude Include="include\JKAProto\CompressedMessage.h" />
+    <ClInclude Include="include\JKAProto\CTHash.h" />
+    <ClInclude Include="include\JKAProto\Geometry.h" />
+    <ClInclude Include="include\JKAProto\Huffman.h" />
+    <ClInclude Include="include\JKAProto\JKAInfo.h" />
+    <ClInclude Include="include\JKAProto\jka\Buttons.h" />
+    <ClInclude Include="include\JKAProto\jka\Gencmds.h" />
+    <ClInclude Include="include\JKAProto\jka\JKAAnims.h" />
+    <ClInclude Include="include\JKAProto\jka\JKAConstants.h" />
+    <ClInclude Include="include\JKAProto\jka\JKADefs.h" />
+    <ClInclude Include="include\JKAProto\jka\JKADefsNet.h" />
+    <ClInclude Include="include\JKAProto\jka\JKAEnums.h" />
+    <ClInclude Include="include\JKAProto\jka\JKAEvents.h" />
+    <ClInclude Include="include\JKAProto\jka\JKAFunctions.h" />
+    <ClInclude Include="include\JKAProto\jka\JKAStructs.h" />
+    <ClInclude Include="include\JKAProto\jka\Usercmd.h" />
+    <ClInclude Include="include\JKAProto\packets\AllConnlessPackets.h" />
+    <ClInclude Include="include\JKAProto\packets\Connect.h" />
+    <ClInclude Include="include\JKAProto\packets\ConnlessPacket.h" />
+    <ClInclude Include="include\JKAProto\packets\ConnlessPacketFactory.h" />
+    <ClInclude Include="include\JKAProto\packets\Disconnect.h" />
+    <ClInclude Include="include\JKAProto\packets\Getchallenge.h" />
+    <ClInclude Include="include\JKAProto\packets\Getinfo.h" />
+    <ClInclude Include="include\JKAProto\packets\Getservers.h" />
+    <ClInclude Include="include\JKAProto\packets\Getstatus.h" />
+    <ClInclude Include="include\JKAProto\packets\Print.h" />
+    <ClInclude Include="include\JKAProto\packets\Rcon.h" />
+    <ClInclude Include="include\JKAProto\_HuffmanTable.h" />
     <ClInclude Include="include\packets\AllConnlessPackets.h" />
     <ClInclude Include="include\packets\Connect.h" />
     <ClInclude Include="include\packets\ConnlessPacket.h" />
@@ -61,11 +73,10 @@
     <ClInclude Include="include\packets\Getstatus.h" />
     <ClInclude Include="include\packets\Print.h" />
     <ClInclude Include="include\packets\Rcon.h" />
-    <ClInclude Include="include\_HuffmanTable.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="include\data\ConnlessPacketsList.inc" />
-    <None Include="include\data\JKAEvents.inc" />
+    <None Include="include\JKAProto\data\ConnlessPacketsList.inc" />
+    <None Include="include\JKAProto\data\JKAEvents.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -121,25 +132,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>

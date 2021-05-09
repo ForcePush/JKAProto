@@ -1,4 +1,4 @@
-#include "../../include/jka/JKAAnims.h"
+#include <JKAProto/jka/JKAAnims.h>
 #include <cassert>
 #include <cmath>
 #include <cstddef>  // for size_t

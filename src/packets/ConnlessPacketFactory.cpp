@@ -1,9 +1,9 @@
-#include "../../include/packets/ConnlessPacketFactory.h"
+#include <JKAProto/packets/ConnlessPacketFactory.h>
 
-#include "../../include/CTHash.h"
-#include "../../include/jka/JKADefs.h"
+#include <JKAProto/CTHash.h>
+#include <JKAProto/jka/JKADefs.h>
 
-#include "../../include/packets/AllConnlessPackets.h"
+#include <JKAProto/packets/AllConnlessPackets.h>
 
 namespace JKA::Packets::ConnlessPacketFactory {
     std::unique_ptr<ConnlessPacket> parsePacket(std::string_view rawPacket)
@@ -40,7 +40,7 @@ namespace JKA::Packets::ConnlessPacketFactory {
                 }
 
         switch (ct_hash(packetName)) {
-            #include "../../include/data/ConnlessPacketsList.inc"
+            #include <JKAProto/data/ConnlessPacketsList.inc>
         }
 
 #undef CONLESS_PACKETS_LIST_ENTRY

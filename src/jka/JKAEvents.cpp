@@ -1,4 +1,4 @@
-#include "../../include/jka/JKAEvents.h"
+#include <JKAProto/jka/JKAEvents.h>
 #include <sstream>
 #include <string>
 #include <map>
@@ -45,7 +45,7 @@ namespace JKA {
         {
             static EventToNameTable table = {
     #define EV_LIST_ENTRY(ev, comment) EvInfo{ entity_event_t::ev, #ev, comment, true },
-                    #include "../../include/data/JKAEvents.inc"
+                    #include <JKAProto/data/JKAEvents.inc>
     #undef EV_LIST_ENTRY
             };
 
@@ -70,7 +70,7 @@ namespace JKA {
 
 #define EV_LIST_ENTRY(ev, comment) { #ev, entity_event_t::ev },
             NameToEventTable table = {
-                #include "../../include/data/JKAEvents.inc"
+                #include <JKAProto/data/JKAEvents.inc>
             };
 #undef EV_LIST_ENTRY
 

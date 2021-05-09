@@ -1,4 +1,4 @@
-#include "../include/CommandParser.h"
+#include <JKAProto/CommandParser.h>
 #include <charconv>
 #include <sstream>
 

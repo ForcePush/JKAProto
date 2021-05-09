@@ -1,4 +1,4 @@
-#include "../include/CompressedMessage.h"
+#include <JKAProto/CompressedMessage.h>
 
 #include <cassert>
 #include <iostream>

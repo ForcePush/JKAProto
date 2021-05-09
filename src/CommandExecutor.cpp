@@ -1,4 +1,4 @@
-#include "../include/CommandExecutor.h"
+#include <JKAProto/CommandExecutor.h>
 
 CommandExecutor::Command CommandExecutor::parseCommandString(std::string_view commandString)
 {
