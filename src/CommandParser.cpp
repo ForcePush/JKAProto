@@ -2,7 +2,7 @@
 #include <charconv>
 #include <sstream>
 
-namespace CommandParser {
+namespace JKA::CommandParser {
     Argument::Argument() :
         Argument("")
     {

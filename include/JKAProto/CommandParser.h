@@ -5,7 +5,7 @@
 #include <sstream>
 #include <vector>
 
-namespace CommandParser
+namespace JKA::CommandParser
 {
     using TypeType = uint32_t;
 

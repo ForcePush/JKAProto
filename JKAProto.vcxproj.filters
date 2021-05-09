@@ -65,9 +65,6 @@
     <ClInclude Include="include\JKAProto\_HuffmanTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\packets\AllConnlessPackets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\JKAProto\AnimationState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -80,46 +77,16 @@
     <ClInclude Include="include\JKAProto\CompressedMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\packets\Connect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\packets\ConnlessPacket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\packets\ConnlessPacketFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\JKAProto\CTHash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\packets\Disconnect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\JKAProto\Geometry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\packets\Getchallenge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\packets\Getinfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\packets\Getservers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\packets\Getstatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\JKAProto\Huffman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\JKAProto\JKAInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\packets\Print.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\packets\Rcon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\JKAProto\jka\JKAAnims.h">

@@ -62,17 +62,6 @@
     <ClInclude Include="include\JKAProto\packets\Print.h" />
     <ClInclude Include="include\JKAProto\packets\Rcon.h" />
     <ClInclude Include="include\JKAProto\_HuffmanTable.h" />
-    <ClInclude Include="include\packets\AllConnlessPackets.h" />
-    <ClInclude Include="include\packets\Connect.h" />
-    <ClInclude Include="include\packets\ConnlessPacket.h" />
-    <ClInclude Include="include\packets\ConnlessPacketFactory.h" />
-    <ClInclude Include="include\packets\Disconnect.h" />
-    <ClInclude Include="include\packets\Getchallenge.h" />
-    <ClInclude Include="include\packets\Getinfo.h" />
-    <ClInclude Include="include\packets\Getservers.h" />
-    <ClInclude Include="include\packets\Getstatus.h" />
-    <ClInclude Include="include\packets\Print.h" />
-    <ClInclude Include="include\packets\Rcon.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\JKAProto\data\ConnlessPacketsList.inc" />
