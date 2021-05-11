@@ -5,12 +5,9 @@
 
 #include <JKAProto/jka/JKADefs.h>
 
-// Q3 TA freq. table.
-#include <JKAProto/_HuffmanTable.h>
-
 namespace JKA {
     /* Get a symbol */
-    int32_t Huffman::Huff_Receive(node_t *node, int32_t *ch, ByteBitStream & fin)
+    int32_t Huffman::Huff_Receive(node_t *node, int32_t *ch, BitStream & fin) noexcept
     {
         while (node && node->symbol == INTERNAL_NODE) {
             if (fin.getBit()) {
@@ -25,22 +22,22 @@ namespace JKA {
         return (*ch = node->symbol);
     }
 
-    Huffman::node_t **Huffman::get_ppnode(huff_t* huff)
+    Huffman::node_t **Huffman::get_ppnode(huff_t* huff) noexcept
     {
-        node_t **tppnode;
+        node_t **tppnode = nullptr;
         if (!huff->freelist) {
             return &(huff->nodePtrs[huff->blocPtrs++]);
-        }     else {
+        } else {
             tppnode = huff->freelist;
-            huff->freelist = (node_t **)*tppnode;
+            huff->freelist = reinterpret_cast<node_t **>(*tppnode);
             return tppnode;
         }
     }
 
     /* Swap the location of these two nodes in the tree */
-    void Huffman::swap(huff_t* huff, node_t *node1, node_t *node2)
+    void Huffman::swap(huff_t* huff, node_t *node1, node_t *node2) noexcept
     {
-        node_t *par1, *par2;
+        node_t *par1{}, *par2{};
 
         par1 = node1->parent;
         par2 = node2->parent;
@@ -48,17 +45,17 @@ namespace JKA {
         if (par1) {
             if (par1->left == node1) {
                 par1->left = node2;
-            }         else {
+            } else {
                 par1->right = node2;
             }
-        }     else {
+        } else {
             huff->tree = node2;
         }
 
         if (par2) {
             if (par2->left == node2) {
                 par2->left = node1;
-            }         else {
+            } else {
                 par2->right = node1;
             }
         }     else {
@@ -70,11 +67,9 @@ namespace JKA {
     }
 
     /* Swap these two nodes in the linked list (update ranks) */
-    void Huffman::swaplist(node_t *node1, node_t *node2)
+    void Huffman::swaplist(node_t *node1, node_t *node2) noexcept
     {
-        node_t *par1;
-
-        par1 = node1->next;
+        node_t *par1 = node1->next;
         node1->next = node2->next;
         node2->next = par1;
 
@@ -102,16 +97,16 @@ namespace JKA {
         }
     }
 
-    void Huffman::free_ppnode(huff_t* huff, node_t **ppnode)
+    void Huffman::free_ppnode(huff_t* huff, node_t **ppnode) noexcept
     {
-        *ppnode = (node_t *)huff->freelist;
+        *ppnode = reinterpret_cast<node_t *>(huff->freelist);
         huff->freelist = ppnode;
     }
 
     /* Do the increments */
-    void Huffman::increment(huff_t* huff, node_t *node)
+    void Huffman::increment(huff_t* huff, node_t *node) noexcept
     {
-        node_t *lnode;
+        node_t *lnode = nullptr;
 
         if (!node) {
             return;
@@ -126,14 +121,14 @@ namespace JKA {
         }
         if (node->prev && node->prev->weight == node->weight) {
             *node->head = node->prev;
-        }     else {
+        } else {
             *node->head = NULL;
             free_ppnode(huff, node->head);
         }
         node->weight++;
         if (node->next && node->next->weight == node->weight) {
             node->head = node->next->head;
-        }     else {
+        } else {
             node->head = get_ppnode(huff);
             *node->head = node;
         }
@@ -148,9 +143,9 @@ namespace JKA {
         }
     }
 
-    void Huffman::Huff_addRef(huff_t* huff, uint8_t ch)
+    void Huffman::Huff_addRef(huff_t* huff, uint8_t ch) noexcept
     {
-        node_t *tnode, *tnode2;
+        node_t *tnode = nullptr, *tnode2 = nullptr;
         if (huff->loc[ch] == NULL) { /* if this is the first transmission of this node */
             tnode = &(huff->nodeList[huff->blocNode++]);
             tnode2 = &(huff->nodeList[huff->blocNode++]);
@@ -162,11 +157,11 @@ namespace JKA {
                 huff->lhead->next->prev = tnode2;
                 if (huff->lhead->next->weight == 1) {
                     tnode2->head = huff->lhead->next->head;
-                }             else {
+                } else {
                     tnode2->head = get_ppnode(huff);
                     *tnode2->head = tnode2;
                 }
-            }         else {
+            } else {
                 tnode2->head = get_ppnode(huff);
                 *tnode2->head = tnode2;
             }
@@ -180,12 +175,12 @@ namespace JKA {
                 huff->lhead->next->prev = tnode;
                 if (huff->lhead->next->weight == 1) {
                     tnode->head = huff->lhead->next->head;
-                }             else {
+                } else {
                     /* this should never happen */
                     tnode->head = get_ppnode(huff);
                     *tnode->head = tnode2;
                 }
-            }         else {
+            } else {
                 /* this should never happen */
                 tnode->head = get_ppnode(huff);
                 *tnode->head = tnode;
@@ -197,10 +192,10 @@ namespace JKA {
             if (huff->lhead->parent) {
                 if (huff->lhead->parent->left == huff->lhead) { /* lhead is guaranteed to by the NYT */
                     huff->lhead->parent->left = tnode2;
-                }             else {
+                } else {
                     huff->lhead->parent->right = tnode2;
                 }
-            }         else {
+            } else {
                 huff->tree = tnode2;
             }
 
@@ -213,12 +208,12 @@ namespace JKA {
             huff->loc[ch] = tnode;
 
             increment(huff, tnode2->parent);
-        }     else {
+        } else {
             increment(huff, huff->loc[ch]);
         }
     }
 
-    size_t Huffman::getDecompressedSize(const char *input)
+    size_t Huffman::getDecompressedSize(const char *input) noexcept
     {
         return static_cast<size_t>(input[0]) * 256 + static_cast<size_t>(input[1]);
     }
@@ -227,14 +222,13 @@ namespace JKA {
     {
         size_t        cch = 0;
         int32_t       ch = 0;
-        huff_t        huff;
-        ByteBitStream inputBuffer(reinterpret_cast<const uint8_t *>(input));
+        huff_t        huff{};
+        BitStream     inputBuffer(input);
 
         if (inputSize <= 0) {
             return 0;
         }
 
-        memset(&huff, 0, sizeof(huff_t));
         // Initialize the tree & list with the NYT node 
         huff.tree = huff.lhead = huff.ltail = huff.loc[NYT] = &(huff.nodeList[huff.blocNode++]);
         huff.tree->symbol = NYT;
@@ -285,7 +279,7 @@ namespace JKA {
     }
 
     /* Send the prefix code for this node */
-    void Huffman::send(const node_t *node, const node_t *child, WriteableByteBitStream & fout)
+    void Huffman::send(const node_t *node, const node_t *child, WriteableBitStream & fout) noexcept
     {
         if (node->parent) {
             send(node->parent, node, fout);
@@ -293,75 +287,24 @@ namespace JKA {
         if (child) {
             if (node->right == child) {
                 fout.addBit(1);
-            }         else {
+            } else {
                 fout.addBit(0);
             }
         }
     }
 
     /* Send a symbol */
-    void Huffman::Huff_transmit(huff_t *huff, int32_t ch, WriteableByteBitStream & fout)
+    void Huffman::Huff_transmit(huff_t *huff, int32_t ch, WriteableBitStream & fout) noexcept
     {
-        int32_t i;
         if (huff->loc[ch] == NULL) {
             /* node_t hasn't been transmitted, send a NYT, then the symbol */
             Huff_transmit(huff, NYT, fout);
-            for (i = 7; i >= 0; i--) {
+            for (int32_t i = 7; i >= 0; i--) {
                 fout.addBit(static_cast<uint8_t>((ch >> i) & 0x1));
             }
-        }     else {
+        } else {
             send(huff->loc[ch], NULL, fout);
         }
-    }
-
-    void Q3Huffman::offsetTransmit(HuffType type, int32_t ch, WriteableByteBitStream & fout, size_t *offset)
-    {
-        fout.setLocation(*offset);
-        switch (type)     {
-        case Huffman::HUFF_COMPRESS:
-            send(msgHuff.compressor.loc[ch], NULL, fout);
-            break;
-        case Huffman::HUFF_DECOMPRESS:
-            send(msgHuff.decompressor.loc[ch], NULL, fout);
-            break;
-        }
-        *offset = fout.getLocation();
-    }
-
-    /* Get a symbol */
-    void Q3Huffman::offsetReceive(HuffType type, int32_t *ch, ByteBitStream & fin, size_t *offset)
-    {
-        fin.setLocation(*offset);
-        const node_t *node = nullptr;
-        switch (type)     {
-        case Huffman::HUFF_COMPRESS:
-            node = msgHuff.compressor.tree;
-            break;
-        case Huffman::HUFF_DECOMPRESS:
-            node = msgHuff.decompressor.tree;
-            break;
-        }
-
-        while (node && node->symbol == INTERNAL_NODE) {
-            if (fin.getBit()) {
-                node = node->right;
-            }         else {
-                node = node->left;
-            }
-        }
-        if (!node) {
-            *ch = 0;
-            return;
-            //        Com_Error(ERR_DROP, "Illegal tree!\n");
-        }
-        *ch = node->symbol;
-        *offset = fin.getLocation();
-    }
-
-    void Q3Huffman::offsetReceive(HuffType type, int32_t *ch, WriteableByteBitStream & fin, size_t *offset)
-    {
-        ByteBitStream inStream(fin.getBuffer(), fin.getLocation());
-        offsetReceive(type, ch, inStream, offset);
     }
 
     // TODO: check for outSize overflow
@@ -370,15 +313,14 @@ namespace JKA {
         (void)outSize;  // Unused for now, see TODO above
 
         int32_t                 ch = 0;
-        WriteableByteBitStream  seq(reinterpret_cast<uint8_t *>(output));
+        WriteableBitStream      seq(output);
         const uint8_t*          inputBytes = reinterpret_cast<const uint8_t *>(input);
-        huff_t                  huff;
+        huff_t                  huff{};
 
         if (inputSize <= 0) {
             return 0;
         }
 
-        memset(&huff, 0, sizeof(huff));
         // Add the NYT (not yet transmitted) node into the tree/list */
         huff.tree = huff.lhead = huff.loc[NYT] = &(huff.nodeList[huff.blocNode++]);
         huff.tree->symbol = NYT;
@@ -408,37 +350,5 @@ namespace JKA {
         size_t len = compress(input.data(), input.size(), buffer.data(), maxCompressedSize);
         buffer.erase(len);
         return buffer;
-    }
-
-    Q3Huffman::Q3Huffman()
-    {
-        memset(&msgHuff.compressor, 0, sizeof(msgHuff.compressor));
-        memset(&msgHuff.decompressor, 0, sizeof(msgHuff.decompressor));
-
-        // Initialize the tree & list with the NYT node 
-        msgHuff.decompressor.tree = msgHuff.decompressor.lhead
-            = msgHuff.decompressor.ltail
-            = msgHuff.decompressor.loc[NYT]
-            = &(msgHuff.decompressor.nodeList[msgHuff.decompressor.blocNode++]);
-        msgHuff.decompressor.tree->symbol = NYT;
-        msgHuff.decompressor.tree->weight = 0;
-        msgHuff.decompressor.lhead->next = msgHuff.decompressor.lhead->prev = NULL;
-        msgHuff.decompressor.tree->parent = msgHuff.decompressor.tree->left = msgHuff.decompressor.tree->right = NULL;
-
-        // Add the NYT (not yet transmitted) node into the tree/list */
-        msgHuff.compressor.tree = msgHuff.compressor.lhead = msgHuff.compressor.loc[NYT] = &(msgHuff.compressor.nodeList[msgHuff.compressor.blocNode++]);
-        msgHuff.compressor.tree->symbol = NYT;
-        msgHuff.compressor.tree->weight = 0;
-        msgHuff.compressor.lhead->next = msgHuff.compressor.lhead->prev = NULL;
-        msgHuff.compressor.tree->parent = msgHuff.compressor.tree->left = msgHuff.compressor.tree->right = NULL;
-        msgHuff.compressor.loc[NYT] = msgHuff.compressor.tree;
-
-
-        for (int i = 0; i < 256; i++) {
-            for (int j = 0; j < msg_hData[i]; j++) {
-                Huff_addRef(&msgHuff.compressor, (uint8_t)i);  // Do update
-                Huff_addRef(&msgHuff.decompressor, (uint8_t)i);  // Do update
-            }
-        }
     }
 }

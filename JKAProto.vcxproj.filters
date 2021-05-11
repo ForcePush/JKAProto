@@ -28,6 +28,15 @@
     <Filter Include="data">
       <UniqueIdentifier>{862b0263-1307-4de6-93c0-dc15488f2b80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\protocol">
+      <UniqueIdentifier>{3d22dfdb-cb1a-45ee-8ef8-4fa7b91dec0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\protocol">
+      <UniqueIdentifier>{786e345a-b308-4d84-ae68-490a4a773786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utility">
+      <UniqueIdentifier>{f1ca90df-2663-4842-9000-765a10d4c12c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AnimationState.cpp">
@@ -37,9 +46,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\CommandParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CompressedMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Huffman.cpp">
@@ -60,6 +66,9 @@
     <ClCompile Include="src\jka\JKAFunctions.cpp">
       <Filter>Source Files\jka</Filter>
     </ClCompile>
+    <ClCompile Include="src\protocol\CompressedMessage.cpp">
+      <Filter>Source Files\protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\JKAProto\_HuffmanTable.h">
@@ -72,9 +81,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\JKAProto\CommandParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\JKAProto\CompressedMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\JKAProto\CTHash.h">
@@ -154,6 +160,33 @@
     </ClInclude>
     <ClInclude Include="include\JKAProto\packets\ConnlessPacketFactory.h">
       <Filter>Header Files\packets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\protocol\State.h">
+      <Filter>Header Files\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\protocol\RawPacket.h">
+      <Filter>Header Files\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\utility\Span.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\utility\BitCast.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\protocol\ServerPacket.h">
+      <Filter>Header Files\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\utility\Traits.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\protocol\PacketBase.h">
+      <Filter>Header Files\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\protocol\CompressedMessage.h">
+      <Filter>Header Files\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\SharedDefs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

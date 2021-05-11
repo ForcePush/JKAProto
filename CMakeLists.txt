@@ -14,12 +14,20 @@ file(GLOB SRC_FILES
     
     ${SRC_DIR}/packets/*.cpp
     ${SRC_DIR}/packets/*.h
+    
+    ${SRC_DIR}/protocol/*.cpp
+    ${SRC_DIR}/protocol/*.h
+    
+    ${SRC_DIR}/utility/*.cpp
+    ${SRC_DIR}/utility/*.h
 )
 
 file(GLOB HDR_FILES
     ${HDR_DIR}/JKAProto/*.h
     ${HDR_DIR}/JKAProto/jka/*.h
     ${HDR_DIR}/JKAProto/packets/*.h
+    ${HDR_DIR}/JKAProto/protocol/*.h
+    ${HDR_DIR}/JKAProto/utility/*.h
 )
 
 set(CMAKE_CXX_STANDARD 17)

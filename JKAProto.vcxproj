@@ -22,19 +22,18 @@
     <ClCompile Include="src\AnimationState.cpp" />
     <ClCompile Include="src\CommandExecutor.cpp" />
     <ClCompile Include="src\CommandParser.cpp" />
-    <ClCompile Include="src\CompressedMessage.cpp" />
     <ClCompile Include="src\Huffman.cpp" />
     <ClCompile Include="src\JKAInfo.cpp" />
     <ClCompile Include="src\jka\JKAAnims.cpp" />
     <ClCompile Include="src\jka\JKAEvents.cpp" />
     <ClCompile Include="src\jka\JKAFunctions.cpp" />
     <ClCompile Include="src\packets\ConnlessPacketFactory.cpp" />
+    <ClCompile Include="src\protocol\CompressedMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\JKAProto\AnimationState.h" />
     <ClInclude Include="include\JKAProto\CommandExecutor.h" />
     <ClInclude Include="include\JKAProto\CommandParser.h" />
-    <ClInclude Include="include\JKAProto\CompressedMessage.h" />
     <ClInclude Include="include\JKAProto\CTHash.h" />
     <ClInclude Include="include\JKAProto\Geometry.h" />
     <ClInclude Include="include\JKAProto\Huffman.h" />
@@ -61,6 +60,15 @@
     <ClInclude Include="include\JKAProto\packets\Getstatus.h" />
     <ClInclude Include="include\JKAProto\packets\Print.h" />
     <ClInclude Include="include\JKAProto\packets\Rcon.h" />
+    <ClInclude Include="include\JKAProto\protocol\CompressedMessage.h" />
+    <ClInclude Include="include\JKAProto\protocol\PacketBase.h" />
+    <ClInclude Include="include\JKAProto\protocol\ServerPacket.h" />
+    <ClInclude Include="include\JKAProto\protocol\RawPacket.h" />
+    <ClInclude Include="include\JKAProto\protocol\State.h" />
+    <ClInclude Include="include\JKAProto\SharedDefs.h" />
+    <ClInclude Include="include\JKAProto\utility\BitCast.h" />
+    <ClInclude Include="include\JKAProto\utility\Span.h" />
+    <ClInclude Include="include\JKAProto\utility\Traits.h" />
     <ClInclude Include="include\JKAProto\_HuffmanTable.h" />
   </ItemGroup>
   <ItemGroup>
