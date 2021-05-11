@@ -9,12 +9,17 @@ namespace JKA::Protocol {
     protected:
         constexpr PacketBase() noexcept = default;
         constexpr PacketBase(Utility::Span<ByteType> dataView_,
-                             int32_t seq) noexcept :
+                             int32_t seq,
+                             bool isFragmented_) noexcept :
             dataView(std::move(dataView_)),
-            packetSequence(seq) {}
+            packetSequence(seq),
+            isFragmented(isFragmented_)
+        {}
 
         PacketBase(RawPacket & packet) noexcept :
-            PacketBase(packet.getWriteableViewAfterSequence(), packet.getSequence()) {}
+            PacketBase(packet.getWriteableViewAfterSequence(),
+                       packet.getSequence(),
+                       packet.isFragmented()) {}
 
     public:
         constexpr int32_t sequence() const noexcept
@@ -37,8 +42,14 @@ namespace JKA::Protocol {
             return dataView.size();
         }
 
+        constexpr bool fragmented() const noexcept
+        {
+            return isFragmented;
+        }
+
     private:
         Utility::Span<ByteType> dataView{};
         int32_t packetSequence{};
+        bool isFragmented{};
     };
 }

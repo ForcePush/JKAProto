@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 #include "CompressedMessage.h"
 #include "PacketBase.h"
 #include "RawPacket.h"
@@ -9,9 +10,9 @@
 
 namespace JKA::Protocol {
     // Does not own the packet's data.
-    class DecryptedClientPacket {
+    class DecryptedServerPacket {
     public:
-        constexpr DecryptedClientPacket(CompressedMessage msg,
+        constexpr DecryptedServerPacket(CompressedMessage msg,
                                         int32_t seq,
                                         int32_t relAck) noexcept :
             message(std::move(msg)),
@@ -24,18 +25,65 @@ namespace JKA::Protocol {
         int32_t reliableAcknowledge{};
     };
 
-    class EncryptedClientPacket : public PacketBase {
+    class EncryptedServerPacket : public PacketBase {
     public:
-        explicit EncryptedClientPacket(RawPacket & packet) :
-            PacketBase(packet.getWriteableViewAfterSequence(),
-                       packet.getSequence())
+        EncryptedServerPacket(RawPacket & packet) noexcept :
+            PacketBase(packet)
         {
         }
 
         // This function will MODIFY the original packet.
-        DecryptedClientPacket decrypt(Q3Huffman & huffman, const State & protocolState) noexcept
+        // Either decrypts non-fragmented packet or stores a fragment into
+        // protocolState's fragmentBuffer.
+        // Updates protocolState's incomingSequence.
+        std::optional<DecryptedServerPacket> processRawPacket(
+            Q3Huffman & huffman,
+            State & protocolState)
         {
-            auto msg = CompressedMessage(huffman, data());
+            if (sequence() <= protocolState.getIncomingSequence()) {
+                return {};  // Duplicating packet
+            }
+
+            auto msg = getMessage(huffman);
+            if (!fragmented()) {
+                return processDecrypt(huffman, msg, protocolState);
+            }
+
+            constexpr int32_t SHORT_BITS = 16;
+            constexpr int32_t SKIP_FRAGMENT = SHORT_BITS * 2;
+
+            int32_t curFragmentStart = msg.readOOB<SHORT_BITS>();
+            int32_t curFragmentLength = msg.readOOB<SHORT_BITS>();
+
+            auto processResult = protocolState.processFragment(data().subspan(SKIP_FRAGMENT),
+                                                               curFragmentStart,
+                                                               sequence());
+            if (processResult.has_value()) {
+                auto fullPacket = RawPacket(std::move(processResult.value()));
+                auto fullEncryptedPacket = EncryptedServerPacket(fullPacket);
+                auto fullMessage = fullEncryptedPacket.getMessage(huffman);
+                return fullEncryptedPacket.processDecrypt(huffman, fullMessage, protocolState);
+            }
+
+            // Mid-fragment
+            return {};
+        }
+
+    private:
+        EncryptedServerPacket(Utility::Span<ByteType> data,
+                              int32_t seq,
+                              bool fragmented_) noexcept :
+            PacketBase(std::move(data), seq, fragmented_)
+        {
+        }
+
+        CompressedMessage getMessage(Q3Huffman & huff)
+        {
+            return CompressedMessage(huff, data());
+        }
+
+        DecryptedServerPacket processDecrypt(Q3Huffman & huffman, CompressedMessage & msg, State & protocolState) noexcept
+        {
             auto reliableAcknowledge = msg.peekLong();
 
             auto span = data().subspan(CL_DECODE_START);
@@ -66,7 +114,8 @@ namespace JKA::Protocol {
                 span[i] ^= key;
             }
 
-            return DecryptedClientPacket(std::move(msg), sequence(), reliableAcknowledge);
+            protocolState.updateIncomingSequence(sequence());
+            return DecryptedServerPacket(std::move(msg), sequence(), reliableAcknowledge);
         }
     };
 }

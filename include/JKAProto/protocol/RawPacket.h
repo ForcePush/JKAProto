@@ -44,10 +44,12 @@ namespace JKA::Protocol {
             swap(a.data, b.data);
         }
 
+        // Note: FRAGMENT_BIT is always resetted.
         int32_t getSequence() const noexcept
         {
             if (data.size() >= sizeof(int32_t)) {
-                return Utility::bit_reinterpret<int32_t>(data);
+                int32_t seq = Utility::bit_reinterpret<int32_t>(data);
+                return seq & ~FRAGMENT_BIT;
             } else {
                 return 0;
             }
@@ -73,12 +75,6 @@ namespace JKA::Protocol {
         {
             auto seq = getSequence();
             return (seq & FRAGMENT_BIT) != 0;
-        }
-
-        int32_t getFragmentSequence() const noexcept
-        {
-            auto seq = getSequence();
-            return seq & ~FRAGMENT_BIT;
         }
 
         Utility::Span<const ByteType> getView() const & noexcept

@@ -3,10 +3,11 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
-#include <vector>
 
 #include "../SharedDefs.h"
+#include "../utility/Span.h"
 #include "../jka/JKAConstants.h"
+#include "FragmentBuffer.h"
 
 namespace JKA::Protocol {
     class State {
@@ -36,6 +37,7 @@ namespace JKA::Protocol {
             using std::swap;
             swap(a.challenge, b.challenge);
             swap(a.reliableCommands, b.reliableCommands);
+            swap(a.incomingSequence, b.incomingSequence);
             swap(a.fragmentBuffer, b.fragmentBuffer);
         }
 
@@ -59,6 +61,26 @@ namespace JKA::Protocol {
             return reliableCommands[reliableCommandsIdx(idx)];
         }
 
+        std::optional<FragmentBuffer::FragmentType>
+        processFragment(Utility::Span<const ByteType> fragment,
+                        int32_t thisFragmentStart,
+                        int32_t thisFragmentSequence)
+        {
+            return fragmentBuffer.processFragment(std::move(fragment),
+                                                  thisFragmentStart,
+                                                  thisFragmentSequence);
+        }
+
+        constexpr int32_t getIncomingSequence() const noexcept
+        {
+            return incomingSequence;
+        }
+
+        void updateIncomingSequence(int32_t newSequence) noexcept
+        {
+            incomingSequence = newSequence;
+        }
+
     private:
         size_t reliableCommandsIdx(size_t rawIdx) const noexcept
         {
@@ -67,6 +89,7 @@ namespace JKA::Protocol {
 
         int32_t challenge{};
         std::array<std::string, MAX_RELIABLE_COMMANDS> reliableCommands{};
-        std::vector<char> fragmentBuffer{};
+        int32_t incomingSequence{};
+        FragmentBuffer fragmentBuffer;
     };
 }
