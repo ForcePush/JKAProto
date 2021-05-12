@@ -65,7 +65,7 @@ namespace JKA::Protocol {
 
             auto fragment = data;
             if (fragment.size() != static_cast<size_t>(curFragmentLength)) {
-                return {};  // TODO: check if sizes must actually match
+                return {};
             }
 
             auto processResult = processFragment(fragment, curFragmentStart, sequence);
