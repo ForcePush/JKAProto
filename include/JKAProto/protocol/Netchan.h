@@ -84,14 +84,14 @@ namespace JKA::Protocol {
         }
 
         // TODO: outgoing fragmentation
-        bool processOutgoingPacket(Utility::Span<ByteType> data, int32_t sequence, Q3Huffman & huff)
+        bool processOutgoingPacket(Utility::Span<ByteType> data, int32_t currentSequence, Q3Huffman & huff)
         {
-            if (sequence <= outgoingSequence) JKA_UNLIKELY {
+            if (currentSequence <= outgoingSequence) JKA_UNLIKELY {
                 return false;  // Duplicating outgoing packet
             }
 
-            outgoingSequence = sequence;
-            OutgoingEncoder::encode(data, sequence, huff, state());
+            OutgoingEncoder::encode(data, currentSequence, huff, state());
+            outgoingSequence = currentSequence + 1;
             return true;
         }
 
