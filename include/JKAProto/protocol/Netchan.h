@@ -16,8 +16,8 @@ namespace JKA::Protocol {
         using OutgoingPacketType = typename OutgoingEncoder::PacketType;
 
         Netchan() noexcept = default;
-        explicit Netchan(State & protocolState_) noexcept :
-            protocolState(std::addressof(protocolState_)) {}
+        explicit Netchan(int32_t challenge) noexcept :
+            protocolState{ challenge } {}
         Netchan(const Netchan &) noexcept = default;
         Netchan(Netchan &&) noexcept = default;
         Netchan & operator=(Netchan other) noexcept
@@ -102,12 +102,12 @@ namespace JKA::Protocol {
 
         State & state() noexcept
         {
-            return *protocolState;
+            return protocolState;
         }
 
         const State & state() const noexcept
         {
-            return *protocolState;
+            return protocolState;
         }
 
         void reset(int32_t newChallenge = 0) noexcept
@@ -129,7 +129,7 @@ namespace JKA::Protocol {
                                                   thisFragmentSequence);
         }
 
-        State *protocolState{};
+        State protocolState{};
         int32_t incomingSequence{};
         int32_t outgoingSequence{};
 
