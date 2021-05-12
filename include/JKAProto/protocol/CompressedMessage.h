@@ -52,6 +52,16 @@ namespace JKA::Protocol {
         constexpr CompressedMessage & operator=(const CompressedMessage & other) noexcept = default;
         constexpr CompressedMessage & operator=(CompressedMessage && other) noexcept = default;
 
+        [[nodiscard]] constexpr Utility::Span<ByteType> to_span() & noexcept
+        {
+            return Utility::Span(dataBuf, cursize);
+        }
+
+        [[nodiscard]] constexpr Utility::Span<const ByteType> to_span() const & noexcept
+        {
+            return Utility::Span(dataBuf, cursize);
+        }
+
         WriteableBitStream dataStream{ nullptr };
 
         size_t cursize = 0;
