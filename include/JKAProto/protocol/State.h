@@ -36,6 +36,7 @@ namespace JKA::Protocol {
             using std::swap;
             swap(a.challenge, b.challenge);
             swap(a.reliableCommands, b.reliableCommands);
+            swap(a.serverCommands, b.serverCommands);
         }
 
         void reset(int32_t newChallenge) noexcept
@@ -48,23 +49,39 @@ namespace JKA::Protocol {
             return challenge;
         }
 
-        constexpr std::string & reliableCommand(size_t idx) &
+        std::string & reliableCommand(size_t sequence) & noexcept
         {
-            return reliableCommands[reliableCommandsIdx(idx)];
+            return reliableCommands[reliableCommandsIdx(sequence)];
         }
 
-        constexpr const std::string & reliableCommand(size_t idx) const &
+        const std::string & reliableCommand(size_t sequence) const & noexcept
         {
-            return reliableCommands[reliableCommandsIdx(idx)];
+            return reliableCommands[reliableCommandsIdx(sequence)];
+        }
+
+        std::string & serverCommand(size_t sequence) & noexcept
+        {
+            return serverCommands[serverCommandsIdx(sequence)];
+        }
+
+        const std::string & serverCommand(size_t sequence) const & noexcept
+        {
+            return serverCommands[serverCommandsIdx(sequence)];
         }
 
     private:
-        size_t reliableCommandsIdx(size_t rawIdx) const noexcept
+        size_t reliableCommandsIdx(size_t sequence) const noexcept
         {
-            return rawIdx % reliableCommands.size();
+            return sequence % reliableCommands.size();
+        }
+
+        size_t serverCommandsIdx(size_t sequence) const noexcept
+        {
+            return sequence % reliableCommands.size();
         }
 
         int32_t challenge{};
         std::array<std::string, MAX_RELIABLE_COMMANDS> reliableCommands{};
+        std::array<std::string, JKA::MAX_RELIABLE_COMMANDS> serverCommands{};
     };
 }

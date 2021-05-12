@@ -23,6 +23,8 @@ namespace JKA::Utility {
         T
     > bit_reinterpret(const CharT *buf) noexcept(std::is_nothrow_default_constructible_v<T>)
     {
+        assert(buf != nullptr);
+
         T tmp;
         std::memcpy(&tmp, buf, sizeof(T));
         return tmp;
@@ -47,6 +49,37 @@ namespace JKA::Utility {
     {
         assert(str.size() >= sizeof(T));
         return bit_reinterpret<T, CharT>(str.data());
+    }
+
+    template<typename T, typename CharT>
+    std::enable_if_t<
+        std::conjunction_v<  // ALL
+            std::disjunction<  // EITHER
+                std::is_same<std::remove_cv_t<CharT>, char>,
+                std::is_same<std::remove_cv_t<CharT>, signed char>,
+                std::is_same<std::remove_cv_t<CharT>, unsigned char>,
+                std::is_same<std::remove_cv_t<CharT>, std::byte>
+            >,
+            std::is_trivially_copyable<T>
+        >
+    > bit_write(const T & from, CharT *to) noexcept
+    {
+        assert(to != nullptr);
+        std::memcpy(to, std::addressof(from), sizeof(T));
+    }
+
+    template<typename T, typename CharT>
+    void bit_write(const T & from, Utility::Span<CharT> to) noexcept
+    {
+        assert(to.size() >= sizeof(T));
+        bit_write<T, CharT>(from, to.data());
+    }
+
+    template<typename T, typename CharT>
+    void bit_write(const T & from, std::basic_string<CharT> & to) noexcept
+    {
+        assert(to.size() >= sizeof(T));
+        bit_write<T, CharT>(from, to.data());
     }
 
     template <class To, class From>

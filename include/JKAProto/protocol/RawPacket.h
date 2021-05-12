@@ -44,15 +44,20 @@ namespace JKA::Protocol {
             swap(a.data, b.data);
         }
 
-        // Note: FRAGMENT_BIT is always resetted.
-        int32_t getSequence() const noexcept
+        int32_t getRawSequence() const noexcept
         {
-            if (data.size() >= sizeof(int32_t)) {
-                int32_t seq = Utility::bit_reinterpret<int32_t>(data);
-                return seq & ~FRAGMENT_BIT;
+            if (data.size() >= sizeof(int32_t)) JKA_LIKELY {
+                return Utility::bit_reinterpret<int32_t>(data);
             } else {
                 return 0;
             }
+        }
+
+        // Note: FRAGMENT_BIT is always resetted.
+        int32_t getSequence() const noexcept
+        {
+            int32_t seq = getRawSequence();
+            return seq & ~FRAGMENT_BIT;
         }
 
         bool isOOB() const noexcept
@@ -73,7 +78,7 @@ namespace JKA::Protocol {
 
         bool isFragmented() const noexcept
         {
-            auto seq = getSequence();
+            auto seq = getRawSequence();
             return (seq & FRAGMENT_BIT) != 0;
         }
 

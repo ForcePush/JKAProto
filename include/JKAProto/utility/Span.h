@@ -190,6 +190,9 @@ namespace JKA::Utility {
 
         [[nodiscard]] constexpr Span subspan(size_type offset, size_type count = SPAN_NPOS) const noexcept
         {
+            if (offset >= size()) JKA_UNLIKELY {
+                return Span(end(), 0);
+            }
             return Span(data() + offset, std::min(count, size() - offset));
         }
 

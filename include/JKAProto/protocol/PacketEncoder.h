@@ -48,10 +48,10 @@ namespace JKA::Protocol {
         // [xx xx xx xx]    <xx xx xx xx>    <xx xx ...       >
         // ^                ^                ^
         // start of packet  data             data + CL_DECODE_START
-        static constexpr PacketType encode(Utility::Span<ByteType> data,
-                                           int32_t sequence,
-                                           Q3Huffman & huff,
-                                           const State & state) noexcept
+        static PacketType encode(Utility::Span<ByteType> data,
+                                 int32_t sequence,
+                                 Q3Huffman & huff,
+                                 const State & state) noexcept
         {
             auto msg = CompressedMessage(huff, data);
             auto span = data.subspan(CL_DECODE_START);
@@ -69,14 +69,14 @@ namespace JKA::Protocol {
     struct ClientPacketEncoder {
         using PacketType = ClientPacket;
 
-        //   sequence        sId (huff)    mAck (huff)  relAck (huff)    XOR-encoded (huff)
-        // [xx xx xx xx]    <xx xx xx xx> <xx xx xx xx> <xx xx xx xx>    <xx xx ...       >
-        // ^                ^                                            ^
-        // start of packet  data                                         data + SV_DECODE_START
-        static constexpr PacketType encode(Utility::Span<ByteType> data,
-                                           int32_t sequence,
-                                           Q3Huffman & huff,
-                                           const State & state) noexcept
+        //   sequence        qport      sId (huff)    mAck (huff)  relAck (huff)    XOR-encoded (huff)
+        // [xx xx xx xx]    [xx xx]    <xx xx xx xx> <xx xx xx xx> <xx xx xx xx>    <xx xx ...       >
+        // ^                           ^                                            ^
+        // start of packet             data                                         data + SV_DECODE_START
+        static PacketType encode(Utility::Span<ByteType> data,
+                                 int32_t sequence,
+                                 Q3Huffman & huff,
+                                 const State & state) noexcept
         {
             auto msg = CompressedMessage(huff, data);
             auto span = data.subspan(SV_DECODE_START);
@@ -85,7 +85,7 @@ namespace JKA::Protocol {
             int32_t messageAcknowledge = msg.readLong();
             int32_t reliableAcknowledge = msg.readLong();
 
-            auto keyString = Utility::Span(state.reliableCommand(reliableAcknowledge));
+            auto keyString = Utility::Span(state.serverCommand(reliableAcknowledge));
             // Note: sId and mAck are not unsigned-casted, in accordance with the original
             // JKA code
             auto key = static_cast<unsigned char>(state.getChallenge() ^ serverId ^ messageAcknowledge);

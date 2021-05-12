@@ -5,6 +5,7 @@
 
 #include "../SharedDefs.h"
 #include "../utility/Span.h"
+#include "RawPacket.h"
 
 namespace JKA::Protocol {
     class FragmentBuffer {
@@ -40,7 +41,8 @@ namespace JKA::Protocol {
                 fragmentSequence = thisFragmentSequence;
             }
 
-            if (thisFragmentStart != fragmentBuffer.size()) {
+            if (static_cast<size_t>(thisFragmentStart) != effectiveFragmentBufferSize()) {
+                clearFragmentBuffer();
                 return {};
             }
 
@@ -48,6 +50,7 @@ namespace JKA::Protocol {
             
             if (fragment.size() != JKA::FRAGMENT_SIZE) {
                 // This fragment was the last one
+                setFragmentSequence(thisFragmentSequence);
                 auto ret = std::move(fragmentBuffer);
                 clearFragmentBuffer();
                 return std::optional<FragmentType>(std::move(ret));
@@ -62,15 +65,35 @@ namespace JKA::Protocol {
             fragmentSequence = 0;
         }
 
+        size_t effectiveFragmentBufferSize() const noexcept
+        {
+            if (fragmentBuffer.size() < RawPacket::SEQUENCE_LEN) {
+                return 0;
+            } else {
+                return fragmentBuffer.size() - RawPacket::SEQUENCE_LEN;
+            }
+        }
+
     private:
         void clearFragmentBuffer()
         {
             fragmentBuffer.clear();
+            fragmentBuffer.append(RawPacket::SEQUENCE_LEN, '\x00');
         }
 
         void appendFragment(Utility::Span<const ByteType> fragment)
         {
             fragmentBuffer.append(fragment.begin(), fragment.end());
+        }
+
+        void setFragmentSequence(int32_t sequence)
+        {
+            if (fragmentBuffer.size() < RawPacket::SEQUENCE_LEN) {
+                assert(!"The fragmentBuffer must not be empty!");
+                return;
+            }
+
+            Utility::bit_write(sequence, fragmentBuffer);
         }
 
         FragmentType fragmentBuffer{};
