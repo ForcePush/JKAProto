@@ -191,6 +191,15 @@
     <ClInclude Include="include\JKAProto\protocol\FragmentBuffer.h">
       <Filter>Header Files\protocol</Filter>
     </ClInclude>
+    <ClInclude Include="include\JKAProto\protocol\Netchan.h">
+      <Filter>Header Files\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\protocol\PacketEncoder.h">
+      <Filter>Header Files\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\protocol\ClientPacket.h">
+      <Filter>Header Files\protocol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\JKAProto\data\ConnlessPacketsList.inc">

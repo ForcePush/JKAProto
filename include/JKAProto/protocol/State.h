@@ -7,7 +7,6 @@
 #include "../SharedDefs.h"
 #include "../utility/Span.h"
 #include "../jka/JKAConstants.h"
-#include "FragmentBuffer.h"
 
 namespace JKA::Protocol {
     class State {
@@ -37,8 +36,6 @@ namespace JKA::Protocol {
             using std::swap;
             swap(a.challenge, b.challenge);
             swap(a.reliableCommands, b.reliableCommands);
-            swap(a.incomingSequence, b.incomingSequence);
-            swap(a.fragmentBuffer, b.fragmentBuffer);
         }
 
         void reset(int32_t newChallenge) noexcept
@@ -46,39 +43,19 @@ namespace JKA::Protocol {
             swap(*this, State(newChallenge));
         }
 
-        int32_t getChallenge() const noexcept
+        constexpr int32_t getChallenge() const noexcept
         {
             return challenge;
         }
 
-        std::string & reliableCommand(size_t idx) &
+        constexpr std::string & reliableCommand(size_t idx) &
         {
             return reliableCommands[reliableCommandsIdx(idx)];
         }
 
-        const std::string & reliableCommand(size_t idx) const &
+        constexpr const std::string & reliableCommand(size_t idx) const &
         {
             return reliableCommands[reliableCommandsIdx(idx)];
-        }
-
-        std::optional<FragmentBuffer::FragmentType>
-        processFragment(Utility::Span<const ByteType> fragment,
-                        int32_t thisFragmentStart,
-                        int32_t thisFragmentSequence)
-        {
-            return fragmentBuffer.processFragment(std::move(fragment),
-                                                  thisFragmentStart,
-                                                  thisFragmentSequence);
-        }
-
-        constexpr int32_t getIncomingSequence() const noexcept
-        {
-            return incomingSequence;
-        }
-
-        void updateIncomingSequence(int32_t newSequence) noexcept
-        {
-            incomingSequence = newSequence;
         }
 
     private:
@@ -89,7 +66,5 @@ namespace JKA::Protocol {
 
         int32_t challenge{};
         std::array<std::string, MAX_RELIABLE_COMMANDS> reliableCommands{};
-        int32_t incomingSequence{};
-        FragmentBuffer fragmentBuffer;
     };
 }

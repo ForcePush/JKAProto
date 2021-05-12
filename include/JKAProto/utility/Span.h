@@ -92,7 +92,7 @@ namespace JKA::Utility {
         template<typename U>
         Span(Span<U> other) noexcept : Span(cast_span<element_type>(other)) {}
 
-        Span & operator=(Span other)
+        constexpr Span & operator=(Span other) noexcept
         {
             data_ptr = other.data_ptr;
             data_size = other.data_size;
@@ -118,6 +118,17 @@ namespace JKA::Utility {
                           "Could not cast away const, use cast_data_const() "
                           "if you really need it");
             return cast_data_const<U>();
+        }
+
+
+        [[nodiscard]] constexpr Span<const_pointer> to_const() const noexcept
+        {
+            return Span<const value_type>(const_cast<const_pointer>(data()));
+        }
+
+        constexpr operator Span<const_pointer>() const noexcept
+        {
+            return to_const();
         }
 
         template<typename U>

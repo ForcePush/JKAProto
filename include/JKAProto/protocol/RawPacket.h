@@ -112,6 +112,11 @@ namespace JKA::Protocol {
             return data;
         }
 
+        void reset(data_type newData) noexcept
+        {
+            data = std::move(newData);
+        }
+
     private:
         data_type data{};
     };

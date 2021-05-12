@@ -60,9 +60,12 @@
     <ClInclude Include="include\JKAProto\packets\Getstatus.h" />
     <ClInclude Include="include\JKAProto\packets\Print.h" />
     <ClInclude Include="include\JKAProto\packets\Rcon.h" />
+    <ClInclude Include="include\JKAProto\protocol\ClientPacket.h" />
     <ClInclude Include="include\JKAProto\protocol\CompressedMessage.h" />
     <ClInclude Include="include\JKAProto\protocol\FragmentBuffer.h" />
+    <ClInclude Include="include\JKAProto\protocol\Netchan.h" />
     <ClInclude Include="include\JKAProto\protocol\PacketBase.h" />
+    <ClInclude Include="include\JKAProto\protocol\PacketEncoder.h" />
     <ClInclude Include="include\JKAProto\protocol\ServerPacket.h" />
     <ClInclude Include="include\JKAProto\protocol\RawPacket.h" />
     <ClInclude Include="include\JKAProto\protocol\State.h" />

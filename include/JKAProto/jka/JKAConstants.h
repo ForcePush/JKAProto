@@ -33,7 +33,6 @@ namespace JKA {
     static constexpr auto    SV_DECODE_START = 12;
     static constexpr auto    CL_ENCODE_START = 12;
     static constexpr auto    CL_DECODE_START = 4;
-    static constexpr auto    CL_DECODE_KEY_INDEX_START = CL_DECODE_START + 4;
 
     static constexpr auto    MAX_MSGLEN = 49152;
 
