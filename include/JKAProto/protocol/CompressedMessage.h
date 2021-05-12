@@ -54,12 +54,12 @@ namespace JKA::Protocol {
 
         [[nodiscard]] constexpr Utility::Span<ByteType> to_span() & noexcept
         {
-            return Utility::Span(dataBuf, cursize);
+            return Utility::Span<ByteType>(dataBuf, cursize);
         }
 
         [[nodiscard]] constexpr Utility::Span<const ByteType> to_span() const & noexcept
         {
-            return Utility::Span(dataBuf, cursize);
+            return Utility::Span<const ByteType>(dataBuf, cursize);
         }
 
         WriteableBitStream dataStream{ nullptr };

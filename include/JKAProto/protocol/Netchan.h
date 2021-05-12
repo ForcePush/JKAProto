@@ -41,11 +41,6 @@ namespace JKA::Protocol {
             swap(a.fragmentBuffer, b.fragmentBuffer);
         }
 
-        constexpr int32_t getIncomingSequence() const noexcept
-        {
-            return incomingSequence;
-        }
-
         // This function will MODIFY the original packet.
         // Either decrypts non-fragmented packet or stores a fragment into
         // fragmentBuffer.
