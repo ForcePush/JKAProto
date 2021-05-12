@@ -110,6 +110,12 @@ namespace JKA::Protocol {
             return *protocolState;
         }
 
+        void reset(int32_t newChallenge = 0) noexcept
+        {
+            fragmentBuffer.reset();
+            state().reset(newChallenge);
+        }
+
     private:
         std::optional<FragmentBuffer::FragmentType>
         processFragment(Utility::Span<const ByteType> fragment,

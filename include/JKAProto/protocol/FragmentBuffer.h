@@ -56,6 +56,12 @@ namespace JKA::Protocol {
             return {};
         }
 
+        void reset() noexcept
+        {
+            clearFragmentBuffer();
+            fragmentSequence = 0;
+        }
+
     private:
         void clearFragmentBuffer()
         {
