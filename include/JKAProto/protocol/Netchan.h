@@ -112,8 +112,10 @@ namespace JKA::Protocol {
 
         void reset(int32_t newChallenge = 0) noexcept
         {
-            fragmentBuffer.reset();
             state().reset(newChallenge);
+            incomingSequence = 0;
+            outgoingSequence = 0;
+            fragmentBuffer.reset();
         }
 
     private:
