@@ -100,6 +100,22 @@ namespace JKA::Protocol {
             return true;
         }
 
+        constexpr int32_t getIncomingSequence() const noexcept
+        {
+            return incomingSequence;
+        }
+
+        constexpr int32_t getOutgoingSequence() const noexcept
+        {
+            return outgoingSequence;
+        }
+
+        // Called after the initial 'connect' has been sent
+        void setInitialConnectedState() noexcept
+        {
+            outgoingSequence = 1;
+        }
+
         State & state() noexcept
         {
             return protocolState;
@@ -108,6 +124,21 @@ namespace JKA::Protocol {
         const State & state() const noexcept
         {
             return protocolState;
+        }
+
+        constexpr int32_t getChallenge() const noexcept
+        {
+            return state().getChallenge();
+        }
+
+        constexpr std::string & reliableCommand(size_t idx) &
+        {
+            return state().reliableCommand(idx);
+        }
+
+        constexpr const std::string & reliableCommand(size_t idx) const &
+        {
+            return state().reliableCommand(idx);
         }
 
         void reset(int32_t newChallenge = 0) noexcept
