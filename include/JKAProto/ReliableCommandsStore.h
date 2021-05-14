@@ -4,22 +4,21 @@
 #include <string_view>
 #include <type_traits>
 
-#include "../SharedDefs.h"
-#include "../utility/Span.h"
-#include "../jka/JKAConstants.h"
+#include "SharedDefs.h"
+#include "utility/Span.h"
+#include "jka/JKAConstants.h"
 
-namespace JKA::Protocol {
-    class State {
+namespace JKA {
+    class ReliableCommandsStore {
     public:
-        State() noexcept = default;
-        explicit State(int32_t challenge_) noexcept : challenge(challenge_) {}
-        State(const State & other) = default;
-        State(State && other) noexcept : State()
+        ReliableCommandsStore() noexcept = default;
+        ReliableCommandsStore(const ReliableCommandsStore & other) = default;
+        ReliableCommandsStore(ReliableCommandsStore && other) noexcept : ReliableCommandsStore()
         {
             swap(*this, other);
         }
 
-        State & operator=(State other) noexcept
+        ReliableCommandsStore & operator=(ReliableCommandsStore other) noexcept
         {
             swap(*this, other);
             return *this;
@@ -28,25 +27,19 @@ namespace JKA::Protocol {
         template<typename StateTA, typename StateTB>
         friend
             std::enable_if_t<
-                std::is_same_v<std::remove_reference_t<StateTA>, State> &&
-                std::is_same_v<std::remove_reference_t<StateTB>, State>
+                std::is_same_v<std::remove_reference_t<StateTA>, ReliableCommandsStore> &&
+                std::is_same_v<std::remove_reference_t<StateTB>, ReliableCommandsStore>
             >
         swap(StateTA && a, StateTB && b) noexcept
         {
             using std::swap;
-            swap(a.challenge, b.challenge);
             swap(a.reliableCommands, b.reliableCommands);
             swap(a.serverCommands, b.serverCommands);
         }
 
-        void reset(int32_t newChallenge) noexcept
+        void reset() noexcept
         {
-            swap(*this, State(newChallenge));
-        }
-
-        constexpr int32_t getChallenge() const noexcept
-        {
-            return challenge;
+            swap(*this, ReliableCommandsStore());
         }
 
         std::string & reliableCommand(size_t sequence) & noexcept
@@ -80,7 +73,6 @@ namespace JKA::Protocol {
             return sequence % reliableCommands.size();
         }
 
-        int32_t challenge{};
         std::array<std::string, MAX_RELIABLE_COMMANDS> reliableCommands{};
         std::array<std::string, JKA::MAX_RELIABLE_COMMANDS> serverCommands{};
     };

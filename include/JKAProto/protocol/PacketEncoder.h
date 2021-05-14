@@ -2,11 +2,11 @@
 #include "../SharedDefs.h"
 #include "../utility/Span.h"
 #include "../Huffman.h"
+#include "../ReliableCommandsStore.h"
 #include "ClientPacket.h"
 #include "CompressedMessage.h"
 #include "RawPacket.h"
 #include "ServerPacket.h"
-#include "State.h"
 
 namespace JKA::Protocol {
     namespace detail {
@@ -50,16 +50,17 @@ namespace JKA::Protocol {
         // start of packet  data             data + CL_DECODE_START
         static PacketType encode(Utility::Span<ByteType> data,
                                  int32_t sequence,
+                                 int32_t challenge,
                                  Q3Huffman & huff,
-                                 const State & state) noexcept
+                                 const ReliableCommandsStore & store) noexcept
         {
             auto msg = CompressedMessage(huff, data);
             auto span = data.subspan(CL_DECODE_START);
 
             int32_t relAck = msg.readLong();
 
-            auto keyString = Utility::Span(state.reliableCommand(relAck));
-            unsigned char key = static_cast<unsigned char>(state.getChallenge() ^ sequence);
+            auto keyString = Utility::Span(store.reliableCommand(relAck));
+            unsigned char key = static_cast<unsigned char>(challenge ^ sequence);
             detail::BasicEncoder::encode(span, keyString, key);
 
             return PacketType(std::move(data), std::move(msg), sequence, relAck);
@@ -75,8 +76,9 @@ namespace JKA::Protocol {
         // start of packet             data                                         data + SV_DECODE_START
         static PacketType encode(Utility::Span<ByteType> data,
                                  int32_t sequence,
+                                 int32_t challenge,
                                  Q3Huffman & huff,
-                                 const State & state) noexcept
+                                 const ReliableCommandsStore & store) noexcept
         {
             auto msg = CompressedMessage(huff, data);
             auto span = data.subspan(SV_DECODE_START);
@@ -85,10 +87,10 @@ namespace JKA::Protocol {
             int32_t messageAcknowledge = msg.readLong();
             int32_t reliableAcknowledge = msg.readLong();
 
-            auto keyString = Utility::Span(state.serverCommand(reliableAcknowledge));
+            auto keyString = Utility::Span(store.serverCommand(reliableAcknowledge));
             // Note: sId and mAck are not unsigned-casted, in accordance with the original
             // JKA code
-            auto key = static_cast<unsigned char>(state.getChallenge() ^ serverId ^ messageAcknowledge);
+            auto key = static_cast<unsigned char>(challenge ^ serverId ^ messageAcknowledge);
             detail::BasicEncoder::encode(span, keyString, key);
 
             return PacketType(std::move(data), std::move(msg),

@@ -161,9 +161,6 @@
     <ClInclude Include="include\JKAProto\packets\ConnlessPacketFactory.h">
       <Filter>Header Files\packets</Filter>
     </ClInclude>
-    <ClInclude Include="include\JKAProto\protocol\State.h">
-      <Filter>Header Files\protocol</Filter>
-    </ClInclude>
     <ClInclude Include="include\JKAProto\protocol\RawPacket.h">
       <Filter>Header Files\protocol</Filter>
     </ClInclude>
@@ -199,6 +196,18 @@
     </ClInclude>
     <ClInclude Include="include\JKAProto\protocol\ClientPacket.h">
       <Filter>Header Files\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\ClientGameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\CEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\ClientConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\ReliableCommandsStore.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

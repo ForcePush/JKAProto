@@ -1,7 +1,6 @@
 #pragma once
 #include "CompressedMessage.h"
 #include "RawPacket.h"
-#include "State.h"
 #include "../SharedDefs.h"
 
 namespace JKA::Protocol {
