@@ -2,6 +2,7 @@
 
 #include "JKAFunctions.h"
 #include "JKAStructs.h"
+#include "../SharedDefs.h"
 
 namespace JKA {
     typedef struct usercmd_s {
@@ -13,6 +14,8 @@ namespace JKA {
         uint8_t invensel{};
         uint8_t generic_cmd{};
         int8_t  forwardmove{}, rightmove{}, upmove{};
+
+        TimePoint arriveTime{};
 
         inline void updateAngles(const vec3_t & viewangles, const decltype(angles) deltaAngles) noexcept
         {

@@ -72,8 +72,8 @@ namespace JKA::Protocol {
 
         //   sequence        qport      sId (huff)    mAck (huff)  relAck (huff)    XOR-encoded (huff)
         // [xx xx xx xx]    [xx xx]    <xx xx xx xx> <xx xx xx xx> <xx xx xx xx>    <xx xx ...       >
-        // ^                           ^                                            ^
-        // start of packet             data                                         data + SV_DECODE_START
+        // ^                ^                                                       ^
+        // start of packet  data                                                    data + sizeof(qport) + SV_DECODE_START
         static PacketType encode(Utility::Span<ByteType> data,
                                  int32_t sequence,
                                  int32_t challenge,
@@ -81,8 +81,9 @@ namespace JKA::Protocol {
                                  const ReliableCommandsStore & store) noexcept
         {
             auto msg = CompressedMessage(huff, data);
-            auto span = data.subspan(SV_DECODE_START);
+            auto span = data.subspan(RawPacket::QPORT_LEN + SV_DECODE_START);
 
+            uint16_t qport = static_cast<uint16_t>(msg.readOOB<RawPacket::QPORT_LEN * CHAR_BIT>());
             int32_t serverId = msg.readLong();
             int32_t messageAcknowledge = msg.readLong();
             int32_t reliableAcknowledge = msg.readLong();
@@ -94,7 +95,7 @@ namespace JKA::Protocol {
             detail::BasicEncoder::encode(span, keyString, key);
 
             return PacketType(std::move(data), std::move(msg),
-                              sequence, serverId, messageAcknowledge, reliableAcknowledge);
+                              sequence, qport, serverId, messageAcknowledge, reliableAcknowledge);
         }
     };
 

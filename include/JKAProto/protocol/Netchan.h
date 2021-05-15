@@ -1,5 +1,6 @@
 #pragma once
 #include "../jka/JKAConstants.h"
+#include "../ClientConnection.h"
 #include "../ReliableCommandsStore.h"
 #include "../SharedDefs.h"
 #include "../utility/Span.h"
@@ -16,8 +17,6 @@ namespace JKA::Protocol {
         using OutgoingPacketType = typename OutgoingEncoder::PacketType;
 
         Netchan() noexcept = default;
-        explicit Netchan(int32_t challenge) noexcept :
-            challenge{ challenge } {}
         Netchan(const Netchan &) noexcept = default;
         Netchan(Netchan &&) noexcept = default;
         Netchan & operator=(Netchan other) noexcept
@@ -35,8 +34,6 @@ namespace JKA::Protocol {
         swap(NetchanA && a, NetchanB && b) noexcept
         {
             using std::swap;
-            swap(a.challenge, b.challenge);
-            swap(a.protocolState, b.protocolState);
             swap(a.incomingSequence, b.incomingSequence);
             swap(a.outgoingSequence, b.outgoingSequence);
             swap(a.fragmentBuffer, b.fragmentBuffer);
@@ -48,6 +45,7 @@ namespace JKA::Protocol {
         // Updates incomingSequence.
         std::optional<IncomingPacketType> processIncomingPacket(RawPacket & packet,
                                                                 Q3Huffman & huffman,
+                                                                ClientConnection & connection,
                                                                 const ReliableCommandsStore & store)
         {
             int32_t sequence = packet.getSequence();
@@ -55,7 +53,7 @@ namespace JKA::Protocol {
             auto data = packet.getWriteableViewAfterSequence();
 
             if (!fragmented) JKA_LIKELY {
-                return processIncomingData(data, sequence, huffman, store);
+                return processIncomingData(data, sequence, huffman, connection, store);
             }
 
             // This is a fragment
@@ -74,7 +72,8 @@ namespace JKA::Protocol {
             auto processResult = processFragment(fragment, curFragmentStart, sequence);
             if (processResult.has_value()) {
                 packet.reset(std::move(processResult.value()));
-                return processIncomingData(packet.getWriteableViewAfterSequence(), sequence, huffman, store);
+                return processIncomingData(packet.getWriteableViewAfterSequence(),
+                                           sequence, huffman, connection, store);
             }
 
             // Mid-fragment
@@ -85,13 +84,14 @@ namespace JKA::Protocol {
         bool processOutgoingPacket(Utility::Span<ByteType> data,
                                    int32_t currentSequence,
                                    Q3Huffman & huff, 
+                                   ClientConnection & connection,
                                    const ReliableCommandsStore & store)
         {
             if (currentSequence < outgoingSequence) JKA_UNLIKELY {
                 return false;  // Duplicating outgoing packet
             }
 
-            OutgoingEncoder::encode(data, currentSequence, getChallenge(), huff, store);
+            OutgoingEncoder::encode(data, currentSequence, connection.challenge, huff, store);
             outgoingSequence = currentSequence + 1;
             return true;
         }
@@ -112,14 +112,8 @@ namespace JKA::Protocol {
             outgoingSequence = 1;
         }
 
-        constexpr int32_t getChallenge() const noexcept
+        void reset() noexcept
         {
-            return challenge;
-        }
-
-        void reset(int32_t newChallenge = 0) noexcept
-        {
-            challenge = newChallenge;
             incomingSequence = 0;
             outgoingSequence = 0;
             fragmentBuffer.reset();
@@ -129,6 +123,7 @@ namespace JKA::Protocol {
         std::optional<IncomingPacketType> processIncomingData(Utility::Span<ByteType> data,
                                                               int32_t sequence,
                                                               Q3Huffman & huffman,
+                                                              ClientConnection & connection,
                                                               const ReliableCommandsStore & store)
         {
             if (sequence <= getIncomingSequence()) {
@@ -136,7 +131,7 @@ namespace JKA::Protocol {
             }
 
             incomingSequence = sequence;
-            return std::move(PacketEncoderT::encode(data, sequence, getChallenge(), huffman, store));
+            return std::move(PacketEncoderT::encode(data, sequence, connection.challenge, huffman, store));
         }
 
         std::optional<FragmentBuffer::FragmentType>
@@ -149,7 +144,6 @@ namespace JKA::Protocol {
                                                   thisFragmentSequence);
         }
 
-        int32_t challenge = 0;
         int32_t incomingSequence{};
         int32_t outgoingSequence{};
 

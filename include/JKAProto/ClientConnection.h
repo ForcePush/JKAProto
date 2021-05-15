@@ -8,15 +8,19 @@
 namespace JKA {
     // A dataclass that represents the client's connection to the server
     struct ClientConnection {
+        void reset(int32_t newChallenge = 0)
+        {
+            *this = ClientConnection();
+            challenge = newChallenge;
+        }
+
         // Connection-related data
-        uint16_t qport = 0;  // TODO: must be the same as in JKAInfo
+        int32_t challenge = 0;
+        uint16_t qport = 0;  // TODO: must be the same as in gameState.info
 
-        TimePoint lastPacketSentTime{};
-        TimePoint lastPacketTime{};
+        TimePoint lastServerPacketTime{};
+        TimePoint lastClientPacketTime{};
         TimePoint connectTime{};
-
-        int32_t checksumFeed = 0;
-        int32_t serverMessageSequence = 0;
 
         connstate_t state = CA_DISCONNECTED;
         TimePoint lastStateChangeTime{};
@@ -26,6 +30,7 @@ namespace JKA {
 
         int32_t reliableSequence = 0;
         int32_t reliableAcknowledge = 0;
+        int32_t messageAcknowledge = 0;
 
         int32_t serverMessageSequence = 0;
         int32_t checksumFeed = 0;

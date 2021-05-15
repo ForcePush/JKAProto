@@ -16,6 +16,10 @@ namespace JKA::Protocol {
         static_assert(SEQUENCE_LEN == 4,
                       "The original JKA code relies on sizeof(int32_t) == 4");
 
+        static constexpr size_t QPORT_LEN = sizeof(uint16_t);
+        static_assert(QPORT_LEN == 2,
+                      "The original JKA code relies on sizeof(uint16_t) == 2");
+
         RawPacket() noexcept(std::is_nothrow_default_constructible_v<decltype(data)>)
             = default;
         RawPacket(const RawPacket & other) = default;

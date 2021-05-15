@@ -1,5 +1,6 @@
 #include <JKAProto/JKAInfo.h>
 
+#include <algorithm>
 #include <charconv>
 #include <string>
 #include <sstream>
@@ -29,7 +30,12 @@ namespace JKA {
                 key = infostring.substr(idx, nextBackslash - idx);
             } else {
                 value = infostring.substr(idx, nextBackslash - idx);
-                jkaInfo[std::string(key)] = value;
+                // Transform the key to the lower-case
+                auto keyStr = std::string(key);
+                std::transform(keyStr.begin(), keyStr.end(), keyStr.begin(), [](char c) {
+                    return static_cast<char>(std::tolower(c));
+                });
+                jkaInfo[std::move(keyStr)] = value;
             }
 
             isKey = !isKey;

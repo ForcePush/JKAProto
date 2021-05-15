@@ -89,6 +89,10 @@ namespace JKA::Protocol {
 
         const netField_t *field = &entityStateFields[0];
         size_t fieldsCount = readByte();
+        if (fieldsCount >= entityStateFields.size()) JKA_UNLIKELY{
+            assert(!"Invalid entityState (corrupt or malicious packet)");
+            return;
+        }
 
         for (size_t i = 0; i < fieldsCount; i++, field++) {
             const int32_t *fromF = reinterpret_cast<const int32_t *>(reinterpret_cast<const uint8_t *>(from) + field->offset);
@@ -261,6 +265,10 @@ namespace JKA::Protocol {
         }
 
         size_t lc = readByte();
+        if (lc >= pilotPlayerStateFields.size()) JKA_UNLIKELY {
+            assert(!"Invalid playerState (corrupt or malicious packet)");
+            return;
+        }
 
         field = PSFields;
         for (size_t i = 0; i < lc; i++, field++) {

@@ -5,8 +5,8 @@ namespace JKA {
     using ByteType = char;
     static_assert(sizeof(ByteType) == sizeof(char));
 
-    using TimePoint = std::chrono::steady_clock::time_point;
-
+    using Clock = std::chrono::system_clock;
+    using TimePoint = Clock::time_point;
 }
 
 #if __has_cpp_attribute(likely)
