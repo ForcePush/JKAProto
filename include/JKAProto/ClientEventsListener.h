@@ -1,5 +1,7 @@
 #pragma once
 #include "jka/JKAEnums.h"
+#include "jka/Usercmd.h"
+#include "JKAInfo.h"
 #include "CEntity.h"
 #include "CommandParser.h"
 

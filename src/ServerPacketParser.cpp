@@ -34,9 +34,7 @@ namespace JKA {
         }
         case CLS_CONNECT_RESPONSE:
         {
-            if (connection.state == CA_CHALLENGING) {
-                setConnectionState(CA_CONNECTED);
-            }
+            setConnectionState(CA_CONNECTED);
             break;
         }
         }
@@ -62,7 +60,7 @@ namespace JKA {
 
             clientInfoView = clientInfoView.substr(1, clientInfoView.size() - 2);
             auto clientInfo = JKAInfo::fromInfostring(clientInfoView);
-            setClientInfo(std::move(clientInfo));
+            connectSent(std::move(clientInfo));
             break;
         }
         }
@@ -126,6 +124,12 @@ namespace JKA {
         }
     }
 
+    void ServerPacketParser::connectSent(JKAInfo info)
+    {
+        setClientInfo(std::move(info));
+        setConnectionState(CA_CONNECTING);
+    }
+
     void ServerPacketParser::reset(int32_t newChallenge)
     {
         reliableCommands.reset();
@@ -164,7 +168,12 @@ namespace JKA {
         evListener.onClientInfoChanged(gameState.info, newInfo);
         gameState.info = std::move(newInfo);
 
-        connection.qport = static_cast<uint16_t>(std::stoi(gameState.info["qport"]));
+        try {
+            connection.challenge = static_cast<int32_t>(std::stoi(gameState.info["challenge"]));
+            connection.qport = static_cast<uint16_t>(std::stoul(gameState.info["qport"]));
+        } catch (const std::invalid_argument &) {
+        } catch (const std::out_of_range &) {
+        }
     }
 
     void ServerPacketParser::parseServerCommand(Protocol::CompressedMessage & message)
@@ -607,7 +616,7 @@ namespace JKA {
         return str;
     }
 
-    void ServerPacketParser::cmd_disconnect(const Command & cmd)
+    void ServerPacketParser::cmd_disconnect(const Command &)
     {
         reset();
     }

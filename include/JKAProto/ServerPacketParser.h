@@ -29,6 +29,8 @@ namespace JKA {
         void handleConnfullPacketFromServer(Protocol::ServerPacket & packet,
                                             TimePoint arriveTime);
 
+        void connectSent(JKAInfo info);
+
     private:
         // TODO: thread_local?
         static Huffman huffman;

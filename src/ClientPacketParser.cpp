@@ -72,6 +72,8 @@ namespace JKA {
 
     void ClientPacketParser::parseUserMove(Protocol::CompressedMessage & message, bool delta)
     {
+        static_cast<void>(delta);
+
         int32_t cmdCount = message.readByte();
 
         if (cmdCount < 1 || cmdCount > MAX_PACKET_USERCMDS) {
@@ -97,7 +99,7 @@ namespace JKA {
 
     void ClientPacketParser::executeUserCmd(usercmd_t & cmd)
     {
-        if (cmd.serverTime < gameState.lastUsercmd.serverTime) {
+        if (cmd.serverTime <= gameState.lastUsercmd.serverTime) {
             return;
         }
         cmd.arriveTime = connection.lastClientPacketTime;

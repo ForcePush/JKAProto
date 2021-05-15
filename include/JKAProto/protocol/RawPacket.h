@@ -50,7 +50,7 @@ namespace JKA::Protocol {
 
         int32_t getRawSequence() const noexcept
         {
-            if (data.size() >= sizeof(int32_t)) JKA_LIKELY {
+            if (data.size() >= SEQUENCE_LEN) JKA_LIKELY {
                 return Utility::bit_reinterpret<int32_t>(data);
             } else {
                 return 0;
@@ -62,6 +62,16 @@ namespace JKA::Protocol {
         {
             int32_t seq = getRawSequence();
             return seq & ~FRAGMENT_BIT;
+        }
+
+        // For client packets only
+        uint16_t getQport() const noexcept
+        {
+            if (data.size() >= SEQUENCE_LEN + QPORT_LEN) JKA_LIKELY {
+                return Utility::bit_reinterpret<uint16_t>(getViewAfterSequence());
+            } else {
+                return 0;
+            }
         }
 
         bool isOOB() const noexcept
