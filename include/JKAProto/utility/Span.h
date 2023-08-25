@@ -16,7 +16,7 @@ namespace JKA::Utility {
     class Span;
 
     template<typename U, typename W>
-    Span<U>cast_span_const(const Span<W> & the_span) noexcept;
+    Span<U> cast_span_const(const Span<W> & the_span) noexcept;
 
     template<typename U, typename W>
     Span<U> cast_span(const Span<W> & the_span) noexcept;
