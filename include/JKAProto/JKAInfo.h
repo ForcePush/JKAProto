@@ -5,6 +5,7 @@
 #include <map>
 
 namespace JKA {
+    // NOTE: All infostring keys are lowercase
     class JKAInfo : public std::map<std::string, std::string, std::less<>> {
     public:
         using MapType = std::map<std::string, std::string, std::less<>>;
