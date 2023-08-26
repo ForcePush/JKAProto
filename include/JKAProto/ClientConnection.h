@@ -24,6 +24,7 @@ namespace JKA {
 
         connstate_t state = CA_DISCONNECTED;
         TimePoint lastStateChangeTime{};
+        TimePoint lastPacketTime{};
 
         // Protocol-related data
         int32_t serverId = 0;
