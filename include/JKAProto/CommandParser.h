@@ -88,7 +88,13 @@ namespace JKA::CommandParser
         if (begin != end) {
             ss << begin++->getStr();
             for (auto it = begin; it != end; ++it) {
-                ss << " " << it->getStr();
+                auto itStr = it->getStr();
+                ss << ' ';
+                if (itStr.find(' ') != itStr.npos) {
+                    ss << '"' << itStr << '"';
+                } else {
+                    ss << itStr;
+                }
             }
         }
         return ss.str();
