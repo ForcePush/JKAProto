@@ -51,6 +51,23 @@ namespace JKA
         CA_CINEMATIC		// playing a cinematic or a static pic, not connected to a server
     } connstate_t;
 
+    inline const char* connstateToString(connstate_t state)
+    {
+        switch (state) {
+        case CA_UNINITIALIZED: return "CA_UNINITIALIZED";
+        case CA_DISCONNECTED: return "CA_DISCONNECTED";
+        case CA_AUTHORIZING: return "CA_AUTHORIZING";
+        case CA_CONNECTING: return "CA_CONNECTING";
+        case CA_CHALLENGING: return "CA_CHALLENGING";
+        case CA_CONNECTED: return "CA_CONNECTED";
+        case CA_LOADING: return "CA_LOADING";
+        case CA_PRIMED: return "CA_PRIMED";
+        case CA_ACTIVE: return "CA_ACTIVE";
+        case CA_CINEMATIC: return "CA_CINEMATIC";
+        default: return "<UNKNOWN STATE>";
+        }
+    }
+
     enum ConnlessType {
         CLS__BEGIN = 0,
 
