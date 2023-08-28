@@ -1,5 +1,8 @@
 #pragma once
 #include <cinttypes>
+#include <cstring>
+#include <type_traits>
+
 #include "JKAConstants.h"
 #include "JKAEnums.h"
 
@@ -362,7 +365,15 @@ namespace JKA
     } gameState_t;
 
     // snapshots are a view of the server at a given time
-    typedef struct {
+    struct clSnapshot_t {
+        void reset() noexcept
+        {
+            static_assert(
+                std::is_trivial_v<std::remove_reference_t<decltype(*this)>>
+            );
+            std::memset(this, 0, sizeof(*this));
+        }
+
         bool valid;                    // cleared if delta parsing was invalid
         int32_t snapFlags;             // rate delayed and dropped commands
 
@@ -382,7 +393,7 @@ namespace JKA
 
         int32_t serverCommandNum;      // execute all commands up to this before
                                        // making the snapshot current
-    } clSnapshot_t;
+    };
 
     // ********************************* clientSnapshot_t *********************************
     typedef struct {
