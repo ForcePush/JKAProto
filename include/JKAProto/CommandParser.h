@@ -111,5 +111,5 @@ namespace JKA::CommandParser
         }
     };
 
-    Command parseCommand(std::string_view cmd, std::string_view sepChars = " ");
+    Command parseCommand(std::string_view cmd, std::string_view sepChars = " \r\n");
 }
