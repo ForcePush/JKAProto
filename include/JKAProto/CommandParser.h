@@ -82,7 +82,7 @@ namespace JKA::CommandParser
     };
 
     template<typename Iter>
-    std::string concatArgs(Iter begin, Iter end)
+    std::string concatArgs(Iter begin, Iter end, bool escape)
     {
         std::ostringstream ss;
         if (begin != end) {
@@ -90,7 +90,7 @@ namespace JKA::CommandParser
             for (auto it = begin; it != end; ++it) {
                 auto itStr = it->getStr();
                 ss << ' ';
-                if (itStr.find(' ') != itStr.npos) {
+                if (escape && itStr.find(' ') != itStr.npos) {
                     ss << '"' << itStr << '"';
                 } else {
                     ss << itStr;
@@ -107,7 +107,14 @@ namespace JKA::CommandParser
         std::string concat(size_t startIdx = 0, size_t endIdx = std::string::npos) const
         {
             auto endIter = (endIdx == std::string::npos) ? (args.end()) : (args.begin() + endIdx);
-            return concatArgs(args.begin() + startIdx, endIter);
+            return concatArgs(args.begin() + startIdx, endIter, /*escape*/ false);
+        }
+
+        // Concats args while placing those with spaces in it in double quotes
+        std::string concatEscape(size_t startIdx = 0, size_t endIdx = std::string::npos) const
+        {
+            auto endIter = (endIdx == std::string::npos) ? (args.end()) : (args.begin() + endIdx);
+            return concatArgs(args.begin() + startIdx, endIter, /*escape*/ true);
         }
     };
 
