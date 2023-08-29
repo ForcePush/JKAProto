@@ -1,5 +1,7 @@
 #pragma once
 #include <chrono>
+#include <cstdint>
+#include <string>
 
 namespace JKA {
     using ByteType = char;
@@ -7,6 +9,9 @@ namespace JKA {
 
     using Clock = std::chrono::system_clock;
     using TimePoint = Clock::time_point;
+
+    constexpr inline std::int32_t PROTOCOL_VERSION = 26;
+    const inline std::string PROTOCOL_VERSION_STRING = std::to_string(PROTOCOL_VERSION);
 }
 
 #if __has_cpp_attribute(likely)
