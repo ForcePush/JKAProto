@@ -24,6 +24,11 @@ namespace JKA {
             {
             }
 
+            Connect(std::string_view infostring, Q3Huffman& huff) :
+                ConnlessDataPacket(getStaticType(), huff.compress("\"" + std::string(infostring) + "\""))
+            {
+            }
+
             virtual ~Connect() = default;
 
             static constexpr ConnlessType getStaticType() noexcept
