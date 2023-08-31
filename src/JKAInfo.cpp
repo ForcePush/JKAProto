@@ -33,7 +33,7 @@ namespace JKA {
                 // Transform the key to the lower-case
                 auto keyStr = std::string(key);
                 std::transform(keyStr.begin(), keyStr.end(), keyStr.begin(), [](char c) {
-                    return static_cast<char>(std::tolower(c));
+                    return static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
                 });
                 jkaInfo[std::move(keyStr)] = value;
             }
