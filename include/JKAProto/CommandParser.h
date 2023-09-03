@@ -19,6 +19,7 @@ namespace JKA::CommandParser
         Int = bitFlag(1),
         Float = bitFlag(2),
         Bool = bitFlag(3),
+        BoolExt = bitFlag(4),
     };
 
     // Note: type conversions here is messy
@@ -40,6 +41,7 @@ namespace JKA::CommandParser
         int32_t getInt32() const;
         float getFloat() const;
         bool getBool() const;
+        bool getBoolExt() const;
 
         template<ArgType Type>
         bool is() const
@@ -54,6 +56,8 @@ namespace JKA::CommandParser
         // Follows the original JKA bool conversion rules:
         // argument is true when and only when it has non-zero int value
         bool isBool() const; 
+        // Extended boolean parser: treats true/yes/on and false/no/off (case-insensitive) as proper booleans
+        bool isBoolExt() const;
 
         bool operator==(const Argument & other) const;
         bool operator==(std::string_view str) const;
@@ -67,9 +71,11 @@ namespace JKA::CommandParser
 
         TypeType type = 0;
         std::string data = "";
+        std::string dataLower = "";
         int64_t dataInt = 0;
         float dataFloat = 0.0f;
         bool dataBool = false;
+        bool dataBoolExt = false;
 
         void setTypeFlag(ArgType flag);
         void clearTypeFlag(ArgType flag);
@@ -79,6 +85,7 @@ namespace JKA::CommandParser
         void parseAsInt();
         void parseAsFloat();
         void parseAsBool();
+        void parseAsBoolExt();
     };
 
     template<typename Iter>

@@ -1,20 +1,58 @@
 #include <JKAProto/CommandParser.h>
+#include <array>
+#include <algorithm>
 #include <charconv>
 #include <sstream>
 
 namespace JKA::CommandParser {
+    namespace detail
+    {
+        std::string toLower(std::string_view str)
+        {
+            auto res = std::string(str);
+            std::transform(std::begin(res), std::end(res), std::begin(res), [](char c) {
+                return static_cast<char>(static_cast<unsigned char>(std::tolower(static_cast<unsigned char>(c))));
+            });
+            return res;
+        }
+
+        constexpr static std::array TRUE_VALUES_LOWER = {
+            std::string_view("true"),
+            std::string_view("on"),
+            std::string_view("yes"),
+        };
+
+        constexpr static std::array FALSE_VALUES_LOWER = {
+            std::string_view("false"),
+            std::string_view("off"),
+            std::string_view("no"),
+        };
+
+        constexpr static bool isTrueValue(std::string_view value_lower) noexcept
+        {
+            return std::find(std::begin(TRUE_VALUES_LOWER), std::end(TRUE_VALUES_LOWER), value_lower) != std::end(TRUE_VALUES_LOWER);
+        }
+
+        constexpr static bool isFalseValue(std::string_view value_lower) noexcept
+        {
+            return std::find(std::begin(FALSE_VALUES_LOWER), std::end(FALSE_VALUES_LOWER), value_lower) != std::end(FALSE_VALUES_LOWER);
+        }
+    }
+
     Argument::Argument() :
         Argument("")
     {
     }
 
     Argument::Argument(std::string_view string) :
-        data(string)
+        data(string),
+        dataLower(detail::toLower(string))
     {
         setTypeFlag(ArgType::Str);  // Always have a string value
         parseAsInt();
         parseAsFloat();
         parseAsBool();
+        parseAsBoolExt();
     }
 
     const std::string & Argument::getStr() const
@@ -40,6 +78,11 @@ namespace JKA::CommandParser {
     bool Argument::getBool() const
     {
         return dataBool;
+    }
+
+    bool Argument::getBoolExt() const
+    {
+        return dataBoolExt;
     }
 
     void Argument::setTypeFlag(ArgType flag)
@@ -88,6 +131,24 @@ namespace JKA::CommandParser {
         }
     }
 
+    void Argument::parseAsBoolExt()
+    {
+        if (isBool()) {  // Classical JA-bools are also extended bools
+            dataBoolExt = dataBool;
+            setTypeFlag(ArgType::BoolExt);
+            return;
+        }
+
+        if (detail::isTrueValue(dataLower)) {
+            dataBoolExt = true;
+            setTypeFlag(ArgType::BoolExt);
+        } else if (detail::isFalseValue(dataLower)) {
+            dataBoolExt = false;
+            setTypeFlag(ArgType::BoolExt);
+        }
+        // not a true value nor false value => not a BoolExt
+    }
+
     bool Argument::isStr() const
     {
         return is<ArgType::Str>();
@@ -106,6 +167,11 @@ namespace JKA::CommandParser {
     bool Argument::isBool() const
     {
         return is<ArgType::Bool>();
+    }
+
+    bool Argument::isBoolExt() const
+    {
+        return is<ArgType::BoolExt>();
     }
 
     bool Argument::operator==(const Argument & other) const
