@@ -44,9 +44,14 @@ namespace JKA::CommandParser
         bool getBoolExt() const;
 
         template<ArgType Type>
-        bool is() const
+        bool is() const noexcept
         {
             return (type & static_cast<TypeType>(Type)) != 0;
+        }
+
+        bool is(ArgType targetType) const noexcept
+        {
+            return (type & static_cast<TypeType>(targetType)) != 0;
         }
 
         bool isStr() const;

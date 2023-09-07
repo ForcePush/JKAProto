@@ -75,6 +75,9 @@
     <ClCompile Include="src\ClientPacketParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\JKAProto\AdvancedCommandExecutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\JKAProto\_HuffmanTable.h">
@@ -225,6 +228,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\JKAProto\Snapshot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\AdvancedCommandExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JKAProto\StringLiteral.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
