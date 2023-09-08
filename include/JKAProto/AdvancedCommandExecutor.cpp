@@ -11,7 +11,7 @@ namespace JKA::executor
     {
         auto it = overloads.find(command.name);
         if (it == overloads.end()) {
-            return CommandExecutionResult::fail();
+            return CommandExecutionResult::fail_unknown_command();
         }
         return it->second.invoke(command);
     }

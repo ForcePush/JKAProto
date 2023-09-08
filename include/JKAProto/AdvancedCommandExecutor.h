@@ -17,23 +17,38 @@ namespace JKA::executor {
     // Return value of the command functions. May be useful in the future.
     using CmdRet = int64_t;
     
+    constexpr static CmdRet CMD_OK = {};
+    constexpr static CmdRet CMD_FAIL = 1;
+
+    enum class CommandExecutionResultReason
+    {
+        OK,
+        UNKNOWN_COMMAND,
+        UNKNOWN_OVERLOAD,
+    };
+
     // Result of the command execution
     // - executed: were the command executed at all;
-    // - command_result: what were returned by the command function,
-    // TODO: error reporting (wrong args, no matching overload, etc.)
+    // - command_result: what was returned by the command function,
     struct CommandExecutionResult
     {
         bool executed = false;
+        CommandExecutionResultReason reason;
         std::optional<CmdRet> command_result{};
 
         static CommandExecutionResult ok(CmdRet ret)
         {
-            return { true, std::move(ret) };
+            return { true, CommandExecutionResultReason::OK, std::move(ret) };
         }
 
-        static CommandExecutionResult fail()
+        static CommandExecutionResult fail_unknown_command()
         {
-            return { false, {} };
+            return { false, CommandExecutionResultReason::UNKNOWN_COMMAND, {} };
+        }
+
+        static CommandExecutionResult fail_unknown_overload()
+        {
+            return { false, CommandExecutionResultReason::UNKNOWN_OVERLOAD, {} };
         }
     };
 
@@ -66,6 +81,11 @@ namespace JKA::executor {
         std::string value;
     };
 
+    struct CommandName
+    {
+        std::string value;
+    };
+
     // Implementation details
     namespace detail
     {
@@ -74,6 +94,7 @@ namespace JKA::executor {
         enum class ArgKind
         {
             ACTIVE,
+            PASSIVE,
             TAG,
         };
 
@@ -113,6 +134,10 @@ namespace JKA::executor {
         {
         };
 
+        struct CallbackArgInfoPassiveCommandName
+        {
+        };
+
         // Tag arg: label tag
         struct CallbackArgInfoTagLabel
         {
@@ -123,7 +148,8 @@ namespace JKA::executor {
         using CallbackArgInfoVariants = std::variant<
             CallbackArgInfoActiveSimple,
             CallbackArgInfoTagLabel,
-            CallbackArgInfoActiveTail
+            CallbackArgInfoActiveTail,
+            CallbackArgInfoPassiveCommandName
         >;
 
         struct CallbackArgInfo
@@ -142,13 +168,6 @@ namespace JKA::executor {
         {
             CallbackArgInfoActiveTail info;
             std::optional<CallbackArgInfoTagLabel> tag_label;
-        };
-
-        struct CmdArg
-        {
-            CallbackArgParsed arg_info;
-            std::string name{};
-            std::string help{};
         };
 
         // A "metafunction" to convert compile-time
@@ -353,6 +372,25 @@ namespace JKA::executor {
             static inline CallbackArgInfoActiveTail info = {};
         };
 
+        template<>
+        struct ArgParser<CommandName>
+        {
+            static constexpr ArgKind kind = ArgKind::PASSIVE;
+            static constexpr ArgFlags flags = ArgFlags::NO_FLAGS;
+
+            static CommandName extract_arg(const CommandParser::Command& cmd, size_t)
+            {
+                return CommandName{ cmd.name };
+            }
+
+            static const CallbackArgInfoPassiveCommandName& get_info()
+            {
+                return info;
+            }
+
+            static inline CallbackArgInfoPassiveCommandName info = {};
+        };
+
         struct CompiledCommandArguments
         {
             std::vector<CallbackArgInfo> raw_args;
@@ -492,6 +530,9 @@ namespace JKA::executor {
                             }
 
                             res.back().tag_label = info;
+                        },
+                        [](const CallbackArgInfoPassiveCommandName&) {
+                            // noop
                         },
                     },
                     type.info
@@ -634,14 +675,16 @@ namespace JKA::executor {
                         return CommandExecutionResult::ok(overload.invoke(overload.args, cmd));
                     }
                 }
-                return CommandExecutionResult::fail();
+                return CommandExecutionResult::fail_unknown_overload();
             }
 
             std::ostream& putUsage(std::ostream& os) const
             {
-                for (const auto& overload : overloads) {
-                    overload.putUsage(os);
-                    os << std::endl;
+                for (size_t i = 0; i < overloads.size(); i++) {
+                    if (i != 0) {
+                        os << std::endl;
+                    }
+                    overloads[i].putUsage(os);
                 }
                 return os;
             }
