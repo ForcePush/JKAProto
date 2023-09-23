@@ -10,6 +10,9 @@ namespace JKA {
     using Clock = std::chrono::system_clock;
     using TimePoint = Clock::time_point;
 
+    using PrecClock = std::chrono::high_resolution_clock;
+    using PrecTimePoint = PrecClock::time_point;
+
     constexpr inline std::int32_t PROTOCOL_VERSION = 26;
     const inline std::string PROTOCOL_VERSION_STRING = std::to_string(PROTOCOL_VERSION);
 }
